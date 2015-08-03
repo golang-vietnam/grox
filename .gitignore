@@ -1,0 +1,8 @@
+*.log
+*.out
+*.swap
+__*
+bin
+dist
+node_modules
+pkg
