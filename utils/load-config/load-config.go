@@ -71,7 +71,7 @@ func FromEnv(v interface{}, tag string) {
 		}
 
 		if vField.Kind() == reflect.Struct {
-			FromEnv(vField.Interface(), tag)
+			FromEnv(vField.Addr().Interface(), tag)
 			continue
 		}
 
