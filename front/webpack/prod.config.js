@@ -3,19 +3,24 @@
 var path = require('path');
 var webpack = require('webpack');
 var writeStats = require('./utils/writeStats');
+var CleanPlugin = require('clean-webpack-plugin');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var strip = require('strip-loader');
 
-var assetsPath = path.join(__dirname, '../static/dist');
+var assetsPath = '../static/dist';
 
 module.exports = {
   devtool: 'source-map',
   context: path.resolve(__dirname, '..'),
+  node: {
+    fs: 'empty',
+    path: 'empty'
+  },
   entry: {
     'main': './client.js'
   },
   output: {
-    path: assetsPath,
+    path: path.resolve(__dirname, assetsPath),
     filename: '[name]-[chunkhash].js',
     chunkFilename: '[name]-[chunkhash].js',
     publicPath: '/dist/'
@@ -25,10 +30,14 @@ module.exports = {
       { test: /\.(jpe?g|png|gif|svg|ttf|eot)(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: 'file' },
       { test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "url?limit=10000&minetype=application/font-woff" },
       { test: /\.js$/, exclude: /node_modules/, loaders: [strip.loader('debug'), 'babel?stage=0&optional=runtime&plugins=typecheck']},
-      { test: /\.less$/, loader: ExtractTextPlugin.extract('style', 'css!autoprefixer?browsers=last 2 version!less') }
+      { test: /\.json$/, loader: 'json-loader' },
+      { test: /\.less$/, loader: ExtractTextPlugin.extract('style', 'classname!css?sourceMap=true&modules&importLoaders=2!autoprefixer?browsers=last 2 version!less?outputStyle=expanded&sourceMap=true&sourceMapContents=true') }
     ]
   },
   progress: true,
+  resolveLoader: {
+    root: path.join(__dirname, 'utils')
+  },
   resolve: {
     modulesDirectories: [
       'front',
@@ -37,6 +46,7 @@ module.exports = {
     extensions: ['', '.json', '.js']
   },
   plugins: [
+    new CleanPlugin([assetsPath]),
 
     // css files from the extract-text-plugin loader
     new ExtractTextPlugin('[name]-[chunkhash].css'),
@@ -64,12 +74,15 @@ module.exports = {
     new webpack.optimize.OccurenceOrderPlugin(),
     new webpack.optimize.UglifyJsPlugin({
       compress: {
-          warnings: false
-        }
+        warnings: false
+      }
     }),
 
     // stats
-    function() { this.plugin('done', writeStats); }
-
+    function() {
+      this.plugin('done', function(stats) {
+        writeStats.call(this, stats, 'prod');
+      });
+    }
   ]
 };

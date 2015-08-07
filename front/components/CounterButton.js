@@ -2,6 +2,7 @@ import React, {Component, PropTypes} from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import * as counterActions from '../actions/counterActions';
+import {gcx} from 'utils';
 
 class CounterButton extends Component {
   static propTypes = {
@@ -16,10 +17,10 @@ class CounterButton extends Component {
 
   render() {
     const {count, increment} = this.props;
-    let {className} = this.props;
-    className += ' btn btn-default';
+    const {className} = this.props;
+
     return (
-      <button className={className} onClick={increment}>
+      <button className={gcx('ui button', className)} onClick={increment}>
         You have clicked me {count} time{count === 1 ? '' : 's'}.
       </button>
     );

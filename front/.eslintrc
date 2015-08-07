@@ -5,9 +5,20 @@
     "node": true
   },
   "rules": {
+    "react/jsx-quotes": [2, "single", "avoid-escape"],
     "react/jsx-uses-react": 2,
     "react/jsx-uses-vars": 2,
     "react/react-in-jsx-scope": 2,
+    "react/no-multi-comp": 0,
+    "react/sort-comp": [2, {
+      order: [
+        'lifecycle',
+        '/^on.+$/',
+        'everything-else',
+        'render'
+      ]
+    }],
+    "comma-dangle": 0,
     // Temporarirly disabled due to a possible bug in babel-eslint (todomvc example)
     "block-scoped-var": 0,
     // Temporarily disabled for test/* until babel/babel-eslint#33 is resolved
@@ -21,6 +32,7 @@
     "__DEVELOPMENT__": true,
     "__CLIENT__": true,
     "__SERVER__": true,
+    "__DISABLE_SSR__": true,
     "__DEVTOOLS__": true
   }
 }

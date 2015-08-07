@@ -9,6 +9,7 @@ require('babel/register')({
 global.__CLIENT__ = false;
 global.__SERVER__ = true;
 global.__DEVELOPMENT__ = process.env.NODE_ENV !== 'production';
+global.__DISABLE_SSR__ = process.env.DISABLE_SSR;
 delete global.__BROWSER__;
 
 if (__DEVELOPMENT__) {

@@ -6,6 +6,8 @@ import {isLoaded as isInfoLoaded} from '../reducers/info';
 import {createTransitionHook} from '../universalRouter';
 import Header from '../components/layout/Header';
 
+import {styles, gcx} from 'utils';
+
 class App extends Component {
   static propTypes = {
     logout: PropTypes.func
@@ -28,7 +30,7 @@ class App extends Component {
 
   render() {
     return (
-      <div className="app container">
+      <div className={gcx('app container')}>
         <Header/>
         {this.props.children}
       </div>
