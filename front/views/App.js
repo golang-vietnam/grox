@@ -1,16 +1,12 @@
 import React, {Component, PropTypes} from 'react';
-import {Link} from 'react-router';
-import {bindActionCreators} from 'redux';
-import {connect} from 'react-redux';
-import {isLoaded as isInfoLoaded} from '../reducers/info';
 import {createTransitionHook} from '../universalRouter';
 import Header from '../components/layout/Header';
 
-import {styles, gcx} from 'utils';
+import {gcx} from 'utils';
 
 class App extends Component {
   static propTypes = {
-    logout: PropTypes.func
+    children: PropTypes.element.isRequired
   }
 
   static contextTypes = {
@@ -23,11 +19,6 @@ class App extends Component {
     router.addTransitionHook(createTransitionHook(store));
   }
 
-  handleLogout(event) {
-    event.preventDefault();
-    this.props.logout();
-  }
-
   render() {
     return (
       <div className={gcx('app container')}>
@@ -38,24 +29,17 @@ class App extends Component {
   }
 }
 
-@connect(state => ({
-
-}))
 export default
 class AppContainer {
   static propTypes = {
-    dispatch: PropTypes.func.isRequired
-  }
-
-  static fetchData(store) {
-    const promises = [];
-    return Promise.all(promises);
+    children: PropTypes.element.isRequired
   }
 
   render() {
-    const { dispatch } = this.props;
-    return <App>
-      {this.props.children}
-    </App>;
+    return (
+      <App>
+        {this.props.children}
+      </App>
+    );
   }
 }

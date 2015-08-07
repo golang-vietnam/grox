@@ -42,14 +42,13 @@ module.exports = function writeStats(stats, env) {
     var name = env === 'prod' ?
       m.name :
       m.name.match(cssLoaderRegexp)[1];
-    console.log('writeStats name', name);
+
     name = name.slice('./front/'.length);
 
     //end
     if (m.source) {
       var regex = env === 'prod' ? /module\.exports = ((.|\n)+);/ : /exports\.locals = ((.|\n)+);/;
       var match = m.source.match(regex);
-      // console.log('writeStats', match && match[1]);
       cssModules[name] = match ? JSON.parse(match[1]) : {};
     }
   });

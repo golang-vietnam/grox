@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import CounterButton from '../components/CounterButton';
 
-import {styles, gcx} from 'utils';
+import {gcx} from 'utils';
 
 export default class Home extends Component {
   render() {

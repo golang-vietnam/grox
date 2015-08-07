@@ -46,24 +46,22 @@ export default class Html extends Component {
 function cleanReactid(elemId, reactHtml) {
   const regex = /\ data-reactid="((\.[0-9A-z]+)+)"/g;
   let lastId = [];
-  let tree = [];
-  let count = 0;
+  const tree = [];
 
   const html = reactHtml.replace(regex, (match, reactId) => {
-    count++;
-    let id = reactId.split('.').slice(1);
+    const id = reactId.split('.').slice(1);
     if (id.length > lastId.length) {
-      let extra = id.slice(lastId.length);
+      const extra = id.slice(lastId.length);
       tree.push(extra.map(e => '.' + e));
 
     } else if (id.length === lastId.length) {
-      tree.push(','+id[id.length-1]);
+      tree.push(',' + id[id.length - 1]);
 
     } else {
       for (let i = 0, l = lastId.length - id.length; i < l; i++) {
         tree.push(';');
       }
-      tree.push(id[id.length-1]);
+      tree.push(id[id.length - 1]);
     }
 
     lastId = id;

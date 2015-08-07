@@ -1,6 +1,5 @@
 import React from 'react';
-
-import {styles, gcx} from 'utils';
+import {gcx} from 'utils';
 
 export default
 class CounterButton extends React.Component {

@@ -19,12 +19,12 @@ universalRouter(location, history, store)
     if (__DEVTOOLS__) {
       window.__store = store;
 
-      let state = JSON.stringify(store.getState());
-      let states = window.__states = [JSON.parse(state)];
-      console.log('state', state);
+      const initState = JSON.stringify(store.getState());
+      const states = window.__states = [JSON.parse(initState)];
+      console.log('state', initState);
 
       store.subscribe(() => {
-        let state = JSON.stringify(store.getState());
+        const state = JSON.stringify(store.getState());
         states.push(JSON.parse(state));
         console.log('state', state);
       });

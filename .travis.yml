@@ -1,4 +1,15 @@
-sudo: false
 language: go
 go:
   - 1.4
+notifications:
+  slack:
+    secure: HkPqZdfyrMzwIpid7Dqwm74gfHfyzxtG9e5xZcKZW+Vh739scLKoXn+HaGJ0+lHNRySScqy/iWVI6e+9QmAEopJRHINDv8FxzvHDMhG/kRxwGkS/84XHQf/Vev5fYsgYUDGlb6UZW5QhfLtW5JkuwzZVvEqFNXh6cFkdcCTeR6VaUPDkfzdI2RvTtus5VdfDVq64EV6mSIl11dxaUKdElO4bseUCwqrXJFWNXzml/YKuBG8mNoaoCRN9+3lFUUpMCKXr35QLHhKumS6iFxEQ4ooqqVejmMA/4X4manuJ5e9YAs2pGXCSIJWE+Elk1yYZpVxut01S+zf6K7AWeJM6mtNcXoV5x2BG8yv2H1Y/5E9EH50mTdOzYQfNXKLXToLthI9Gq6zb7oInUBcEFi7OMx8Wf2hfh21TEozIpG9K+g8ZAb0kcc69fo2ZIrwFz7l6F3u1C3QmLNK/hu/TQho+iObkFViqxAeBCv50NQ0FxmpCfC4c/uhQTxbKm1P7JSsVr/uwUTJkXpEnuMR3g/lDc97Hbc2iS46DzEc+mWGm4/lpgzKTfS0gc0bOys4A7YLMzE0r4jwVXnT8UvglwIdbuwgwjDaOaCWn3MYK06p3UsBfyF7cR1D4p37rUDN5/gWKjtJ3QqP8NMIxC6Umv4luhNrB8H74iQ5BUKBIoA1NVjA=
+before_script:
+  - nvm install 0.12.7
+  - nvm use 0.12.7
+  - echo "\n\n\n\n\n" | npm install
+  - npm install -g eslint eslint-config-airbnb babel-eslint eslint-plugin-react
+script:
+  - make
+  - npm run build
+  - cd front && eslint .
