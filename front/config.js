@@ -1,7 +1,7 @@
 module.exports = {
   development: {
     isProduction: false,
-    port: process.env.FRONT_PORT || 8080,
+    port: process.env.FRONT_PORT || 8000,
     apiPort: process.env.API_PORT || 8100,
     apiPath: '/v1',
     app: {
@@ -10,7 +10,7 @@ module.exports = {
   },
   production: {
     isProduction: true,
-    port: process.env.FRONT_PORT || 8080,
+    port: process.env.FRONT_PORT || 8000,
     apiPort: process.env.API_PORT || 8100,
     apiPath: '/v1',
     app: {
