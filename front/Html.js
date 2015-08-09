@@ -44,7 +44,7 @@ export default class Html extends Component {
 }
 
 function cleanReactid(elemId, reactHtml) {
-  const regex = /\ data-reactid="((\.[0-9A-z]+)+)"/g;
+  const regex = /\ data-reactid="((\.[0-9A-z:$]+)+)"/g;
   let lastId = [];
   const tree = [];
 
@@ -68,7 +68,8 @@ function cleanReactid(elemId, reactHtml) {
     return '';
   });
 
-  const script = `(function(){var h="${tree.join('')}".split(/(?=[.,;]+)/),i=[],k=document.getElementById("${elemId}").querySelectorAll("*");for(var l=0,m=k.length,q=0;l<m;l++,q++){var n=h[q],o=n[0],p=n.slice(1);if(o=='.')i.push(p);else if(o==',')i[i.length-1]=p;else{i.pop();while(!p){i.pop();q++;p=h[q].slice(1)};i[i.length-1]=p};k[l].dataset.reactid='.'+i.join('.')}})();`;
+  const script = `(function(){var h="${tree.join('')}".split(/(?=[.,;]+)/),i=[],k=document.getElementById("${elemId}").querySelectorAll("*");for(var l=0,m=k.length,q=0;l<m;l++,q++){var n=h[q],o=n[0],p=n.slice(1);if(o==".")i.push(p);else if(o==",")i[i.length-1]=p;else{i.pop();while(!p){i.pop();q++;p=h[q].slice(1)};i[i.length-1]=p};k[l].dataset.reactid="."+i.join(".")}})();`;
 
   return {html, script};
+  // return {html: reactHtml, script: ''};
 }

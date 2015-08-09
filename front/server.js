@@ -73,7 +73,12 @@ if (config.port) {
       console.info('==> Server is listening');
       console.info('==>   %s running on port %s', config.app.name, config.port);
       console.info('==>   %s proxy to http://localhost:%s', config.apiPath, config.apiPort);
-      console.info('==>   `export DISABLE_SSR=1` to disable server side rendering');
+
+      if (__DISABLE_SSR__) {
+        console.info('==> Server side rendering is disabled');
+      } else {
+        console.info('==>   `export DISABLE_SSR=1` to disable server side rendering');
+      }
     }
   });
 } else {
