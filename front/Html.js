@@ -20,8 +20,9 @@ export default class Html extends Component {
   render() {
     const {webpackStats, component, store} = this.props;
     const title = 'Grox';
-    const reactHtml = React.renderToString(component);
-    const {html, script} = cleanReactid('content', reactHtml);
+    const {html, script} = __DISABLE_SSR__ ?
+      { html: '', script: '' } :
+      cleanReactid('content', React.renderToString(component));
 
     return (
       <html lang='en-us'>
@@ -71,5 +72,4 @@ function cleanReactid(elemId, reactHtml) {
   const script = `(function(){var h="${tree.join('')}".split(/(?=[.,;]+)/),i=[],k=document.getElementById("${elemId}").querySelectorAll("*");for(var l=0,m=k.length,q=0;l<m;l++,q++){var n=h[q],o=n[0],p=n.slice(1);if(o==".")i.push(p);else if(o==",")i[i.length-1]=p;else{i.pop();while(!p){i.pop();q++;p=h[q].slice(1)};i[i.length-1]=p};k[l].dataset.reactid="."+i.join(".")}})();`;
 
   return {html, script};
-  // return {html: reactHtml, script: ''};
 }
