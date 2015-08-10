@@ -12,5 +12,3 @@ test:
 run:
 	$(GOPATH)/bin/grox-server
 
-start: build run
-
