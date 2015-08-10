@@ -20,6 +20,7 @@ func NewItemCtrl(itemStore *stores.ItemStore) *ItemCtrl {
 func (this *ItemCtrl) Get(w http.ResponseWriter, r *http.Request) {
 	ctx := xhttp.GetContext(r)
 	id := ctx.Params.ByName("id")
+
 	xhttp.ResponseJson(w, 200, map[string]interface{}{
 		"id": id,
 	})

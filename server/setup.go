@@ -78,6 +78,7 @@ func (s *setupStruct) setupRoutes() {
 	router := httprouter.New()
 	itemStore := stores.NewItemStore(s.Rethink)
 	userStore := stores.NewUserStore(s.Rethink)
+	storyStore := stores.NewStoryStore(s.Rethink)
 
 	{
 		itemCtrl := handlers.NewItemCtrl(itemStore)
@@ -91,6 +92,13 @@ func (s *setupStruct) setupRoutes() {
 		router.GET("/v1/user", normal(userCtrl.List))
 		router.GET("/v1/user/:id", normal(userCtrl.Get))
 		router.POST("/v1/user", auth(userCtrl.Create))
+	}
+
+	{
+		storyHandler := handlers.NewStoryHandler(storyStore)
+		router.GET("/v1/story", normal(storyHandler.List))
+		router.GET("/v1/story/:id", normal(storyHandler.Get))
+		router.POST("/v1/story", auth(storyHandler.Create))
 	}
 
 	s.Handler = context.ClearHandler(router)

@@ -53,6 +53,15 @@ func (this *Instance) Run(term r.Term) (*r.Cursor, error) {
 	return term.Run(session)
 }
 
+func (this *Instance) RunWrite(term r.Term) (r.WriteResponse, error) {
+	session, err := this.connect()
+	if err != nil {
+		return r.WriteResponse{}, err
+	}
+
+	return term.RunWrite(session)
+}
+
 func (this *Instance) One(term r.Term, result interface{}) error {
 	cursor, err := term.Run(this.session)
 	if err != nil {

@@ -8,3 +8,9 @@ build:
 
 test:
 	go test -v ./...
+
+run:
+	$(GOPATH)/bin/grox-server
+
+start: build run
+
