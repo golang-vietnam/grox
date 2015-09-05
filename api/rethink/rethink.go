@@ -58,7 +58,6 @@ func (this *Instance) RunWrite(term r.Term) (r.WriteResponse, error) {
 	if err != nil {
 		return r.WriteResponse{}, err
 	}
-
 	return term.RunWrite(session)
 }
 

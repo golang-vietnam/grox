@@ -3,6 +3,8 @@ package server
 import (
 	"net/http"
 
+	"gopkg.in/bluesuncorp/validator.v8"
+
 	"github.com/dancannon/gorethink"
 	"github.com/gorilla/context"
 	"github.com/julienschmidt/httprouter"
@@ -20,16 +22,22 @@ var l = logs.New("grox/server")
 type setupStruct struct {
 	Config
 
-	Rethink *rethink.Instance
-	Handler http.Handler
+	Rethink  *rethink.Instance
+	Handler  http.Handler
+	Validate *validator.Validate
 }
 
 func setup(cfg Config) *setupStruct {
 	s := &setupStruct{Config: cfg}
 	s.setupRethink()
 	s.setupRoutes()
+	s.setupValidator()
 
 	return s
+}
+
+func (s *setupStruct) setupValidator() {
+	s.Validate = validator.New(&validator.Config{TagName: "validate"})
 }
 
 func (s *setupStruct) setupRethink() {
@@ -77,7 +85,7 @@ func (s *setupStruct) setupRoutes() {
 
 	router := httprouter.New()
 	itemStore := stores.NewItemStore(s.Rethink)
-	userStore := stores.NewUserStore(s.Rethink)
+	userStore := stores.NewUserStore(s.Rethink, s.Validate)
 	storyStore := stores.NewStoryStore(s.Rethink)
 
 	{
@@ -98,7 +106,7 @@ func (s *setupStruct) setupRoutes() {
 		storyHandler := handlers.NewStoryHandler(storyStore)
 		router.GET("/v1/story", normal(storyHandler.List))
 		router.GET("/v1/story/:id", normal(storyHandler.Get))
-		router.POST("/v1/story", auth(storyHandler.Create))
+		router.POST("/v1/story", normal(storyHandler.Create))
 	}
 
 	s.Handler = context.ClearHandler(router)

@@ -1,12 +1,9 @@
 package domain
 
-type UserId string
-
 type User struct {
-	TimeStamp
-
-	Id    UserId `json:"id" gorethink:"id"`
-	About string `json:"about" gorethink:"about"`
-
-	Submitted []Id `json:"submitted" gorethink:"-"`
+	Common
+	Username string `json:"username" gorethink:"username"`
+	Password string `json:"password" gorethink:"password`
+	Name     string `json:"name" gorethink:"name"`
+	Email    string `json:"email" gorethink:"email"`
 }

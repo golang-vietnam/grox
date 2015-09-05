@@ -32,7 +32,6 @@ func (this *StoryStore) GetById(id string) (story domain.Story, err error) {
 func (this *StoryStore) Create(story *domain.Story) (err error) {
 	_, err = this.re.RunWrite(this.re.Table(StoryTable).Insert(story))
 	return
-
 }
 
 func (this *StoryStore) UpdateAll(query map[string]interface{}, data map[string]interface{}) (int, error) {
