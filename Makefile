@@ -7,10 +7,8 @@ build:
 	go install github.com/golang-vietnam/grox/cmd/grox-server
 
 save:
-	@echo "Saving..."
 	@go get github.com/kr/godep	
-	@export PATH=$(PATH):$(GOPATH)/bin;godep save
-	@echo "Save new dependencies successful!"
+	@export PATH=$(PATH):$(GOPATH)/bin;godep save ./...
 
 test:
 	go test -v ./...

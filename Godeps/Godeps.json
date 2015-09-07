@@ -33,6 +33,14 @@
 			"Rev": "6aacfd5ab513e34f7e64ea9627ab9670371b34e7"
 		},
 		{
+			"ImportPath": "golang.org/x/crypto/bcrypt",
+			"Rev": "aedad9a179ec1ea11b7064c57cbc6dc30d7724ec"
+		},
+		{
+			"ImportPath": "golang.org/x/crypto/blowfish",
+			"Rev": "aedad9a179ec1ea11b7064c57cbc6dc30d7724ec"
+		},
+		{
 			"ImportPath": "gopkg.in/bluesuncorp/validator.v8",
 			"Comment": "v8.1",
 			"Rev": "8324129b028239a2d26c4221165e7d4d512ea697"

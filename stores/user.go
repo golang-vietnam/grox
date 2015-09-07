@@ -4,45 +4,42 @@ import (
 	"errors"
 	"github.com/golang-vietnam/grox/api/rethink"
 	"github.com/golang-vietnam/grox/domain"
-	"gopkg.in/bluesuncorp/validator.v8"
-)
-
-const (
-	UserTable = "user"
+	"github.com/golang-vietnam/grox/utils/validator"
+	"time"
 )
 
 type UserStore struct {
-	re       *rethink.Instance
-	validate *validator.Validate
+	re *rethink.Instance
 }
 
-func NewUserStore(re *rethink.Instance, validate *validator.Validate) *UserStore {
+func NewUserStore(re *rethink.Instance) *UserStore {
 	return &UserStore{
-		re:       re,
-		validate: validate,
+		re: re,
 	}
 }
 
-func (this *UserStore) Create(user *domain.User) (err error) {
-	_, err = this.re.RunWrite(
-		this.re.Table(UserTable).Filter(map[string]interface{}{
-			"username": user.Username}).Insert(user))
-	return
-}
-
-func (this *UserStore) Validate(user *domain.User) []error {
-	var errorList []error
-	errs := this.validate.Struct(user)
-	for _, v := range errs.(validator.ValidationErrors) {
-		switch v.Field {
-		case "Username":
-			switch v.Tag {
-			case "required":
-				errorList = append(errorList, errors.New("Username required"))
-			case "max":
-				errorList = append(errorList, errors.New("Username max length 20 charater"))
+func (this *UserStore) Create(user *domain.User) error {
+	if cussor, err := this.re.Run(this.re.Table(UserTable).Filter(M{"username": user.Username})); err != nil {
+		return err
+	} else {
+		if cussor.IsNil() {
+			if errs := validator.Validate(user); len(errs) > 0 {
+				return errs[0]
 			}
+			user.CreatedTime = time.Now()
+			user.Password = HashPassword(user.Password)
+			ws, err := this.re.RunWrite(
+				this.re.Table(UserTable).Insert(user))
+			if err != nil {
+				return err
+			}
+			if len(ws.GeneratedKeys) > 0 {
+				user.Id = ws.GeneratedKeys[0]
+			}
+			return nil
+		} else {
+			return errors.New("User exist")
 		}
+
 	}
-	return errorList
 }

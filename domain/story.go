@@ -11,7 +11,7 @@ type Story struct {
 	Common
 	Url    string    `json:"url" gorethink:"url"`
 	Slug   string    `json:"slug" gorethink:"slug"`
-	UserId Id        `json:"user_id" gorethink:"user_id"`
+	UserId string    `json:"user_id" gorethink:"user_id"`
 	Title  string    `json:"title" gorethink:"title"`
 	Score  int       `json:"score" gorethink:"score"`
 	Type   StoryType `json:"type" gorethink:"type"`
