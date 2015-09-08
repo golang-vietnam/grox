@@ -40,6 +40,14 @@ func (this *Instance) DB() r.Term {
 	return r.DB(this.db)
 }
 
+func (this *Instance) Exec(term r.Term) error {
+	session, err := this.connect()
+	if err != nil {
+		return err
+	}
+	return term.Exec(session)
+}
+
 func (this *Instance) Table(name string) r.Term {
 	return r.DB(this.db).Table(name)
 }

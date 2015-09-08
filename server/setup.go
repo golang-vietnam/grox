@@ -9,6 +9,7 @@ import (
 
 	"github.com/golang-vietnam/grox/api/rethink"
 	"github.com/golang-vietnam/grox/api/xhttp"
+	"github.com/golang-vietnam/grox/dbscript"
 	"github.com/golang-vietnam/grox/handlers"
 	"github.com/golang-vietnam/grox/middlewares"
 	"github.com/golang-vietnam/grox/stores"
@@ -27,6 +28,7 @@ type setupStruct struct {
 func setup(cfg Config) *setupStruct {
 	s := &setupStruct{Config: cfg}
 	s.setupRethink()
+	s.setupScript()
 	s.setupRoutes()
 
 	return s
@@ -44,6 +46,13 @@ func (s *setupStruct) setupRethink() {
 	}
 
 	s.Rethink = re
+}
+
+func (s *setupStruct) setupScript() {
+	script := dbscript.NewRethinkScript(s.Rethink)
+	if err := script.Settup(); err != nil {
+		l.Fatalln("Could generate Table to RethinkDB")
+	}
 }
 
 func commonMiddlewares() func(http.Handler) http.Handler {
