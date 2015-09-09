@@ -28,7 +28,6 @@ type setupStruct struct {
 func setup(cfg Config) *setupStruct {
 	s := &setupStruct{Config: cfg}
 	s.setupRethink()
-	s.setupScript()
 	s.setupRoutes()
 
 	return s
@@ -46,9 +45,7 @@ func (s *setupStruct) setupRethink() {
 	}
 
 	s.Rethink = re
-}
 
-func (s *setupStruct) setupScript() {
 	script := dbscript.NewRethinkScript(s.Rethink)
 	if err := script.Settup(); err != nil {
 		l.Fatalln("Could generate Table to RethinkDB")
@@ -100,6 +97,8 @@ func (s *setupStruct) setupRoutes() {
 		userCtrl := handlers.NewUserCtrl(userStore)
 		router.GET("/v1/user", normal(userCtrl.List))
 		router.GET("/v1/user/:id", normal(userCtrl.Get))
+		router.PUT("/v1/user/:id", normal(userCtrl.Update))
+		router.DELETE("/v1/user/:id", normal(userCtrl.Delete))
 		router.POST("/v1/user", normal(userCtrl.Create))
 	}
 
