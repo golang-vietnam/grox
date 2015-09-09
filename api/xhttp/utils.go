@@ -1,10 +1,10 @@
 package xhttp
 
 import (
-	"net/http"
-
+	"encoding/json"
 	gorillaContext "github.com/gorilla/context"
 	"github.com/julienschmidt/httprouter"
+	"net/http"
 )
 
 type Composer struct {
@@ -42,4 +42,9 @@ func Adapt(handler http.Handler) httprouter.Handle {
 
 			handler.ServeHTTP(w, r)
 		})
+}
+
+func BindJSON(req *http.Request, obj interface{}) error {
+	decoder := json.NewDecoder(req.Body)
+	return decoder.Decode(obj)
 }

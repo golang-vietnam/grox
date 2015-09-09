@@ -40,6 +40,14 @@ func (this *Instance) DB() r.Term {
 	return r.DB(this.db)
 }
 
+func (this *Instance) Exec(term r.Term) error {
+	session, err := this.connect()
+	if err != nil {
+		return err
+	}
+	return term.Exec(session)
+}
+
 func (this *Instance) Table(name string) r.Term {
 	return r.DB(this.db).Table(name)
 }
@@ -51,6 +59,14 @@ func (this *Instance) Run(term r.Term) (*r.Cursor, error) {
 	}
 
 	return term.Run(session)
+}
+
+func (this *Instance) RunWrite(term r.Term) (r.WriteResponse, error) {
+	session, err := this.connect()
+	if err != nil {
+		return r.WriteResponse{}, err
+	}
+	return term.RunWrite(session)
 }
 
 func (this *Instance) One(term r.Term, result interface{}) error {

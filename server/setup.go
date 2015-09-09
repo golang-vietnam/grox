@@ -9,6 +9,7 @@ import (
 
 	"github.com/golang-vietnam/grox/api/rethink"
 	"github.com/golang-vietnam/grox/api/xhttp"
+	"github.com/golang-vietnam/grox/dbscript"
 	"github.com/golang-vietnam/grox/handlers"
 	"github.com/golang-vietnam/grox/middlewares"
 	"github.com/golang-vietnam/grox/stores"
@@ -44,6 +45,11 @@ func (s *setupStruct) setupRethink() {
 	}
 
 	s.Rethink = re
+
+	script := dbscript.NewRethinkScript(s.Rethink)
+	if err := script.Settup(); err != nil {
+		l.Fatalln("Could generate Table to RethinkDB")
+	}
 }
 
 func commonMiddlewares() func(http.Handler) http.Handler {
@@ -78,6 +84,7 @@ func (s *setupStruct) setupRoutes() {
 	router := httprouter.New()
 	itemStore := stores.NewItemStore(s.Rethink)
 	userStore := stores.NewUserStore(s.Rethink)
+	storyStore := stores.NewStoryStore(s.Rethink)
 
 	{
 		itemCtrl := handlers.NewItemCtrl(itemStore)
@@ -90,7 +97,16 @@ func (s *setupStruct) setupRoutes() {
 		userCtrl := handlers.NewUserCtrl(userStore)
 		router.GET("/v1/user", normal(userCtrl.List))
 		router.GET("/v1/user/:id", normal(userCtrl.Get))
-		router.POST("/v1/user", auth(userCtrl.Create))
+		router.PUT("/v1/user/:id", normal(userCtrl.Update))
+		router.DELETE("/v1/user/:id", normal(userCtrl.Delete))
+		router.POST("/v1/user", normal(userCtrl.Create))
+	}
+
+	{
+		storyHandler := handlers.NewStoryHandler(storyStore)
+		router.GET("/v1/story", normal(storyHandler.List))
+		router.GET("/v1/story/:id", normal(storyHandler.Get))
+		router.POST("/v1/story", normal(storyHandler.Create))
 	}
 
 	s.Handler = context.ClearHandler(router)
