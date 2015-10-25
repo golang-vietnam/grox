@@ -46,9 +46,9 @@ func (s *setupStruct) setupRethink() {
 
 	s.Rethink = re
 
-	script := dbscript.NewRethinkScript(s.Rethink)
-	if err := script.Settup(); err != nil {
-		l.Fatalln("Could generate Table to RethinkDB")
+	script := dbscript.NewRethinkScript(s.Rethink, s.Config.RethinkDB.DBName)
+	if err := script.Setup(); err != nil {
+		l.Fatalln("Error generating data", err)
 	}
 }
 
