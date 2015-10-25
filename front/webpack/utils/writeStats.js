@@ -5,7 +5,6 @@ var fs = require('fs'),
 module.exports = function writeStats(stats, env) {
 
   var publicPath = this.options.output.publicPath;
-
   var json = stats.toJson();
 
   // get chunks by name and extensions
@@ -32,6 +31,7 @@ module.exports = function writeStats(stats, env) {
   var cssFiles = getChunks('main', 'css');
   var cssModules = {};
   var cssLoaderRegexp = /.\/~\/css-loader\?.*!([^!]*\.less)$/;
+  var callbackFuncs = [];
 
   json.modules.filter(function(m) {
     if (env === 'prod') {
@@ -47,11 +47,37 @@ module.exports = function writeStats(stats, env) {
 
     //end
     if (m.source) {
-      var regex = env === 'prod' ? /module\.exports = ((.|\n)+);/ : /exports\.locals = ((.|\n)+);/;
+      var regex = env === 'prod' ?
+        /module\.exports = ((.|\n)+);/ :
+        /exports\.locals = ((.|\n)+);/;
       var match = m.source.match(regex);
-      cssModules[name] = match ? JSON.parse(match[1]) : {};
+      if (match) {
+        var data = match[1].replace(
+        /"([^"]*)":\s"([^\s"]*)\s*"\s*\+\s*require\([^,]+(?=[,\}])/g,
+        function(match, oldClass, newClass) {
+          match.replace(
+          /!([^!"]+)"\)\.locals\["([^"]*)"\]/g,
+          function(m, extraModule, extraClass) {
+            callbackFuncs.push(function() {
+              cssModules[name][oldClass] += ' ' + cssModules[extraModule][extraClass];
+            });
+            return m;
+          });
+
+          return '"' + oldClass + '": "' + newClass + '"';
+        });
+
+        cssModules[name] = JSON.parse(data);
+
+      } else {
+        cssModules[name] = {};
+      }
     }
   });
+
+  callbackFuncs.forEach(function(cb) {
+    cb();
+  })
 
   // Find compiled images in modules
   // it will be used to map original filename to the compiled one
@@ -81,5 +107,4 @@ module.exports = function writeStats(stats, env) {
   };
 
   fs.writeFileSync(filepath, JSON.stringify(content));
-
 };
