@@ -18,7 +18,7 @@ export function readStats() {
     __stats = JSON.parse(data);
     return __stats;
 
-  } catch(e) {
+  } catch (e) {
     console.log(e);
     console.log('You might see the error: webpack-stats.json does not exist. Don\'t worry, just wait until webpack finish running then make a change to reload the node server.');
     return {
