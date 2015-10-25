@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {gcx} from 'utils';
 
-const items = Array.apply(null, Array(20)).map((x, i) => ({
+const items = Array.apply(null, Array(10)).map((x, i) => ({
   title: 'Sample',
   url: 'http://grox.golang.vn',
   score: 10 * i,
@@ -9,7 +9,7 @@ const items = Array.apply(null, Array(20)).map((x, i) => ({
 }));
 
 export default
-class Home extends Component {
+class Newest extends Component {
   render() {
     return (
       <div className={gcx('ui container')}>

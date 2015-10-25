@@ -8,7 +8,7 @@
   "scripts": {
     "start": "NODE_PATH=\"./front\" NODE_ENV=\"production\" PORT=\"9000\" node front/babel.server",
     "build": "node ./node_modules/webpack/bin/webpack.js --verbose --colors --display-error-details --config front/webpack/prod.config.js",
-    "lint": "cd front && node ../node_modules/eslint/bin/eslint.js .",
+    "lint": "cd front && eslint .",
     "start-dev": "NODE_PATH=\"./front\" NODE_ENV=\"development\" node front/babel.server.js",
     "watch-client": "UV_THREADPOOL_SIZE=100 NODE_PATH=\"./front\" node front/webpack/webpack-dev-server.js",
     "dev": "node ./node_modules/concurrently/src/main.js --kill-others \"npm run watch-client\" \"npm run start-dev\""

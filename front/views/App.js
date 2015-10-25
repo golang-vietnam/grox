@@ -21,8 +21,8 @@ class App extends Component {
 
   render() {
     return (
-      <div className={gcx('app container')}>
-        <Header/>
+      <div className={gcx('container')}>
+        <Header {...this.props}/>
         {this.props.children}
       </div>
     );
@@ -37,7 +37,7 @@ class AppContainer {
 
   render() {
     return (
-      <App>
+      <App {...this.props}>
         {this.props.children}
       </App>
     );
